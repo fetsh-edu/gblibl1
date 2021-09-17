@@ -2,6 +2,7 @@ package com.example.gb_libs.presentation
 
 import com.example.gb_libs.model.GithubUser
 import com.example.gb_libs.model.GithubUsersRepo
+import com.example.gb_libs.screens.AndroidScreens
 import com.example.gb_libs.view.UserItemView
 import com.example.gb_libs.view.UsersListView
 import com.github.terrakok.cicerone.Router
@@ -28,6 +29,10 @@ class UsersPresenter(
         }
     }
 
+    private val users by lazy {
+        usersRepo.getUsers()
+    }
+
     val usersListPresenter = UsersListPresenter()
 
     override fun onFirstViewAttach() {
@@ -37,12 +42,11 @@ class UsersPresenter(
         loadData()
 
         usersListPresenter.itemClickListener = { itemView ->
-            // todo
+            router.navigateTo(AndroidScreens.UserScreen(users[itemView.pos].id))
         }
     }
 
     fun loadData() {
-        val users = usersRepo.getUsers()
         usersListPresenter.users.addAll(users)
         viewState.updateList()
     }
