@@ -6,6 +6,8 @@ import com.example.gb_libs.screens.AndroidScreens
 import com.example.gb_libs.view.UserItemView
 import com.example.gb_libs.view.UsersListView
 import com.github.terrakok.cicerone.Router
+import io.reactivex.rxjava3.core.Observer
+import io.reactivex.rxjava3.disposables.Disposable
 import moxy.InjectViewState
 import moxy.MvpPresenter
 
@@ -29,26 +31,41 @@ class UsersPresenter(
         }
     }
 
-    private val users by lazy {
-        usersRepo.getUsers()
-    }
-
     val usersListPresenter = UsersListPresenter()
+    private var subscription : Disposable? = null
+
+    private val usersObserver = object : Observer<GithubUser> {
+        override fun onSubscribe(d: Disposable) {
+            usersListPresenter.users.clear()
+            subscription = d
+        }
+
+        override fun onNext(user: GithubUser) {
+            usersListPresenter.users.add(user)
+        }
+
+        override fun onError(e: Throwable) {}
+
+        override fun onComplete() {
+            viewState.updateList()
+        }
+
+    }
 
     override fun onFirstViewAttach() {
         super.onFirstViewAttach()
 
         viewState.init()
-        loadData()
+        usersRepo.getUsers().subscribe(usersObserver)
 
         usersListPresenter.itemClickListener = { itemView ->
-            router.navigateTo(AndroidScreens.UserScreen(users[itemView.pos].id))
+            router.navigateTo(AndroidScreens.UserScreen(usersListPresenter.users[itemView.pos].id))
         }
     }
 
-    fun loadData() {
-        usersListPresenter.users.addAll(users)
-        viewState.updateList()
+    override fun onDestroy() {
+        super.onDestroy()
+        subscription?.dispose()
     }
 
     fun backPressed(): Boolean {

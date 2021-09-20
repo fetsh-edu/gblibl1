@@ -1,5 +1,7 @@
 package com.example.gb_libs.model
 
+import io.reactivex.rxjava3.core.Observable
+
 class GithubUsersRepo {
 
     private val users = listOf(
@@ -10,7 +12,8 @@ class GithubUsersRepo {
         GithubUser("user5", "user5")
     )
 
-    fun getUsers() = users
+    fun getUsers(): Observable<GithubUser> =
+        Observable.fromIterable(users)
 
     fun find(userId: String) : GithubUser? {
         return users.find { user -> user.id == userId }
