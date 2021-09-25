@@ -6,6 +6,7 @@ import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import io.reactivex.rxjava3.core.Single
 import kotlinx.parcelize.Parcelize
+import me.fetsh.geekbrains.libraries.github.remote.RetrofitHolder
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
@@ -26,28 +27,8 @@ data class GithubUser(
 
     class Repo {
 
-        fun getUsers() = API_SERVICE.getUsers()
+        fun getUsers() = RetrofitHolder.apiService.getUsers()
 
-        interface ApiService {
-
-            @GET("/users")
-            fun getUsers(): Single<List<GithubUser>>
-        }
-
-        companion object {
-            val API_SERVICE: ApiService by lazy {
-                val gson = GsonBuilder()
-                    .excludeFieldsWithoutExposeAnnotation()
-                    .create()
-
-                Retrofit.Builder()
-                    .baseUrl("https://api.github.com")
-                    .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
-                    .addConverterFactory(GsonConverterFactory.create(gson))
-                    .build()
-                    .create(ApiService::class.java)
-            }
-        }
     }
 
 }
