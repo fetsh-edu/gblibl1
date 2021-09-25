@@ -10,6 +10,10 @@ interface RVContract {
         fun loadAvatar(url: String)
     }
 
+    interface RepoItemView : ItemView {
+        fun showName(login: String)
+    }
+
     interface ListPresenter<V : ItemView> {
         var itemClickListener: ((V) -> Unit)?
         fun bindView(view: V)
@@ -17,5 +21,6 @@ interface RVContract {
     }
 
     interface UserListPresenter : ListPresenter<UserItemView>
+    interface ReposListPresenter : ListPresenter<RepoItemView>
 
 }

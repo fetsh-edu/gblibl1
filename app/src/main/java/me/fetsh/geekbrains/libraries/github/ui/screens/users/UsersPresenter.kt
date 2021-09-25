@@ -46,13 +46,11 @@ class UsersPresenter(
 
     private fun loadData() {
         subscription = usersRepo.getUsers()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ users ->
                 usersListPresenter.users.addAll(users)
                 viewState.updateList()
             }, {
-                Log.e("UsersPresenter", "Ошибка получения пользователей", it)
+                Log.e("UsersPresenter", "Failed to load users", it)
             })
     }
 

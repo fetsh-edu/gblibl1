@@ -4,10 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import me.fetsh.geekbrains.libraries.github.App
 import github.databinding.FragmentUserBinding
+import me.fetsh.geekbrains.libraries.github.App
+import me.fetsh.geekbrains.libraries.github.models.GithubRepo
 import me.fetsh.geekbrains.libraries.github.models.GithubUser
 import me.fetsh.geekbrains.libraries.github.navigation.BackButtonListener
+import me.fetsh.geekbrains.libraries.github.ui.images.GlideImageLoader
+import me.fetsh.geekbrains.libraries.github.ui.screens.users.UsersRVAdapter
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
 
@@ -28,9 +31,20 @@ class UserFragment() : MvpAppCompatFragment(), UserView, BackButtonListener {
     private val presenter by moxyPresenter {
         val user : GithubUser? = arguments?.getParcelable(ARGUMENTS_USER)
         UserPresenter(
+            GithubRepo.Repo(),
             GithubUser.Repo(),
             App.instance.router,
             user!!
+        )
+    }
+
+    private val imageLoader by lazy {
+        GlideImageLoader()
+    }
+
+    private val adapter by lazy {
+        ReposRVAdapter(
+            presenter.reposListPresenter,
         )
     }
 
@@ -41,8 +55,27 @@ class UserFragment() : MvpAppCompatFragment(), UserView, BackButtonListener {
     }
 
     override fun init(user: GithubUser?) {
-        vb?.userLogin?.text = user?.login
+        vb?.repositories?.isNestedScrollingEnabled = false
+        vb?.repositories?.adapter = adapter
+        vb?.userLogin?.text = "@${user?.login}"
+        user?.avatarUrl?.let{ url ->
+            vb?.avatarImageView?.let {
+                imageLoader.loadTo(url, it)
+            }
+        }
     }
+
+    override fun showFullUserData(user: GithubUser) {
+        vb?.userName?.visibility = View.VISIBLE
+        vb?.userName?.text = user.name
+        vb?.followersCount?.text = user.followers.toString()
+        vb?.followingCount?.text = user.following.toString()
+    }
+
+    override fun updateReposList() {
+        adapter.notifyDataSetChanged()
+    }
+
 
     override fun onDestroyView() {
         super.onDestroyView()
