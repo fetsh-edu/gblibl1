@@ -9,6 +9,7 @@ import github.databinding.FragmentUserBinding
 import me.fetsh.geekbrains.libraries.github.App
 import me.fetsh.geekbrains.libraries.github.models.GithubRepo
 import me.fetsh.geekbrains.libraries.github.navigation.BackButtonListener
+import me.fetsh.geekbrains.libraries.github.ui.activity.MainActivity
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
 
@@ -35,6 +36,7 @@ class RepoFragment : MvpAppCompatFragment(), RepoView, BackButtonListener {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        (activity as MainActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
         return FragmentRepoBinding.inflate(inflater, container, false).also {
             vb = it
         }.root

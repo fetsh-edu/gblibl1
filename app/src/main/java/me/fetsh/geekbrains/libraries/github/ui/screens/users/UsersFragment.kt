@@ -9,6 +9,7 @@ import me.fetsh.geekbrains.libraries.github.App
 import github.databinding.FragmentUsersBinding
 import me.fetsh.geekbrains.libraries.github.models.GithubUser
 import me.fetsh.geekbrains.libraries.github.navigation.BackButtonListener
+import me.fetsh.geekbrains.libraries.github.ui.activity.MainActivity
 import me.fetsh.geekbrains.libraries.github.ui.images.GlideImageLoader
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
@@ -27,6 +28,7 @@ class UsersFragment : MvpAppCompatFragment(), UsersView, BackButtonListener {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        (activity as MainActivity).supportActionBar?.setDisplayHomeAsUpEnabled(false)
         return FragmentUsersBinding.inflate(inflater, container, false).also {
             vb = it
         }.root

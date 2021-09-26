@@ -1,5 +1,7 @@
 package me.fetsh.geekbrains.libraries.github.ui.screens.user
 
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +11,7 @@ import me.fetsh.geekbrains.libraries.github.App
 import me.fetsh.geekbrains.libraries.github.models.GithubRepo
 import me.fetsh.geekbrains.libraries.github.models.GithubUser
 import me.fetsh.geekbrains.libraries.github.navigation.BackButtonListener
+import me.fetsh.geekbrains.libraries.github.ui.activity.MainActivity
 import me.fetsh.geekbrains.libraries.github.ui.images.GlideImageLoader
 import me.fetsh.geekbrains.libraries.github.ui.screens.users.UsersRVAdapter
 import moxy.MvpAppCompatFragment
@@ -49,6 +52,7 @@ class UserFragment() : MvpAppCompatFragment(), UserView, BackButtonListener {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        (activity as MainActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
         return FragmentUserBinding.inflate(inflater, container, false).also {
             vb = it
         }.root

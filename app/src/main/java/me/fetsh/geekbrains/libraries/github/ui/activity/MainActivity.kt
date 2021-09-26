@@ -25,7 +25,6 @@ class MainActivity : MvpAppCompatActivity(), MainView {
         vb = ActivityMainBinding.inflate(layoutInflater)
 
         setContentView(vb?.root)
-
     }
     override fun onResumeFragments() {
         super.onResumeFragments()
@@ -44,6 +43,11 @@ class MainActivity : MvpAppCompatActivity(), MainView {
             }
         }
         presenter.backPressed()
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
     }
 
 }
