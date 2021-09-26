@@ -6,6 +6,7 @@
         <entry key="app/src/main/res/drawable/ic_baseline_add_location_24.xml" value="0.33" />
         <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.37135416666666665" />
         <entry key="app/src/main/res/drawable/ic_repo.xml" value="0.37135416666666665" />
+        <entry key="app/src/main/res/layout/fragment_repo.xml" value="0.35520833333333335" />
         <entry key="app/src/main/res/layout/fragment_user.xml" value="0.34610630407911" />
         <entry key="app/src/main/res/layout/fragment_users.xml" value="0.35520833333333335" />
         <entry key="app/src/main/res/layout/item_user.xml" value="0.8762886597938144" />

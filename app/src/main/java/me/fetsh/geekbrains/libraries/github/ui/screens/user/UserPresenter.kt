@@ -5,6 +5,7 @@ import com.github.terrakok.cicerone.Router
 import io.reactivex.rxjava3.disposables.Disposable
 import me.fetsh.geekbrains.libraries.github.models.GithubRepo
 import me.fetsh.geekbrains.libraries.github.models.GithubUser
+import me.fetsh.geekbrains.libraries.github.navigation.Screens
 import me.fetsh.geekbrains.libraries.github.ui.contracts.RVContract
 import moxy.InjectViewState
 import moxy.MvpPresenter
@@ -39,6 +40,9 @@ class UserPresenter(
         viewState.init(user)
         loadUser()
         loadRepositories()
+        reposListPresenter.itemClickListener = { itemView ->
+            router.navigateTo(Screens.RepoScreen(reposListPresenter.repos[itemView.pos]))
+        }
     }
 
     private fun loadRepositories() {
