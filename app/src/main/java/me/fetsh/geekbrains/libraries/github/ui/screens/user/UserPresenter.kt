@@ -27,8 +27,8 @@ class UserPresenter(
 
         override fun bindView(view: RVContract.RepoItemView) {
             val repo = repos[view.pos]
-            android.util.Log.d("AAA", "Repo ${repo}")
             view.showName(repo.name)
+
         }
     }
     val reposListPresenter = ReposListPresenter()
@@ -42,6 +42,7 @@ class UserPresenter(
     }
 
     private fun loadRepositories() {
+        viewState.showLoading()
         reposRepo.getRepos(user.login)
             .subscribe({ repos ->
                 reposListPresenter.repos.addAll(repos)

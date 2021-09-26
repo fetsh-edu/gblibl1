@@ -9,4 +9,5 @@ interface UserView : MvpView {
     fun init(user: GithubUser?)
     fun showFullUserData(user: GithubUser)
     fun updateReposList()
+    fun showLoading()
 }

@@ -2,6 +2,7 @@ package me.fetsh.geekbrains.libraries.github.ui.screens.user
 
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import github.databinding.ItemUserBinding
@@ -37,6 +38,8 @@ class ReposRVAdapter (
 
         override fun showName(login: String) {
             vb.tvLogin.text = login
+            vb.repoIcon.visibility = View.VISIBLE
+            vb.avatarImageView.visibility = View.GONE
         }
 
         override var pos: Int = -1

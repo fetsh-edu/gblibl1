@@ -14,7 +14,14 @@ data class GithubRepo(
     val id: Long,
 
     @Expose
-    val name: String
+    val name: String,
+
+    @Expose
+    val description: String? = null,
+
+    @Expose
+    val forks: Int
+
 ) : Parcelable {
     class Repo {
         fun getRepos(login: String): Single<List<GithubRepo>> =

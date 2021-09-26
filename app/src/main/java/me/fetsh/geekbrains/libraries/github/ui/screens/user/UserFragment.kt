@@ -72,7 +72,18 @@ class UserFragment() : MvpAppCompatFragment(), UserView, BackButtonListener {
         vb?.followingCount?.text = user.following.toString()
     }
 
+    override fun showLoading() {
+        vb?.progressBar?.visibility = View.VISIBLE
+        vb?.repoHeader?.visibility = View.INVISIBLE
+        vb?.repoHeaderHR?.visibility = View.INVISIBLE
+        vb?.repositories?.visibility = View.INVISIBLE
+    }
+
     override fun updateReposList() {
+        vb?.progressBar?.visibility = View.GONE
+        vb?.repoHeader?.visibility = View.VISIBLE
+        vb?.repoHeaderHR?.visibility = View.VISIBLE
+        vb?.repositories?.visibility = View.VISIBLE
         adapter.notifyDataSetChanged()
     }
 

@@ -2,12 +2,13 @@ package me.fetsh.geekbrains.libraries.github.ui.activity
 
 import android.os.Bundle
 import com.github.terrakok.cicerone.androidx.AppNavigator
+import github.R
 import github.databinding.ActivityMainBinding
 import me.fetsh.geekbrains.libraries.github.App
-import github.R
 import me.fetsh.geekbrains.libraries.github.navigation.BackButtonListener
 import moxy.MvpAppCompatActivity
 import moxy.ktx.moxyPresenter
+
 
 class MainActivity : MvpAppCompatActivity(), MainView {
 
@@ -22,6 +23,7 @@ class MainActivity : MvpAppCompatActivity(), MainView {
         super.onCreate(savedInstanceState)
 
         vb = ActivityMainBinding.inflate(layoutInflater)
+
         setContentView(vb?.root)
 
     }
