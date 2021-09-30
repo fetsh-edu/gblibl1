@@ -2,25 +2,31 @@ package me.fetsh.geekbrains.libraries.github.ui.screens.user
 
 import android.util.Log
 import com.github.terrakok.cicerone.Router
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.disposables.Disposable
-import me.fetsh.geekbrains.libraries.github.models.GithubRepo
-import me.fetsh.geekbrains.libraries.github.models.GithubUser
+import io.reactivex.rxjava3.schedulers.Schedulers
+import me.fetsh.geekbrains.libraries.github.db.Database
+import me.fetsh.geekbrains.libraries.github.models.*
 import me.fetsh.geekbrains.libraries.github.navigation.Screens
 import me.fetsh.geekbrains.libraries.github.ui.contracts.RVContract
+import me.fetsh.geekbrains.libraries.github.utils.AndroidNetworkStatus
 import moxy.InjectViewState
 import moxy.MvpPresenter
 
 @InjectViewState
 class UserPresenter(
-    private val reposRepo: GithubRepo.Repo,
-    private val usersRepo: GithubUser.Repo,
+    private val reposRepo: GithubRepoRemote.Repo,
+    private val usersRepo: GithubUserRemote.Repo,
     private val router: Router,
-    private val user: GithubUser,
+    private val user: GithubUserUI,
+    private val db: Database,
+    private val networkStatus: AndroidNetworkStatus
 ) : MvpPresenter<UserView>() {
 
     class ReposListPresenter : RVContract.ReposListPresenter {
 
-        val repos = mutableListOf<GithubRepo>()
+        val repos = mutableListOf<GithubRepoUI>()
 
         override var itemClickListener: ((RVContract.RepoItemView) -> Unit)? = null
 
@@ -47,23 +53,39 @@ class UserPresenter(
 
     private fun loadRepositories() {
         viewState.showLoading()
-        reposRepo.getRepos(user.login)
+        networkStatus.isOnlineSingle()
+            .subscribeOn(Schedulers.io())
+            .flatMap { isOnline ->
+                when (isOnline) {
+                    true -> {
+                        reposRepo.getReposByURL(user.reposUrl).doAfterSuccess{ repos ->
+                            db.repositoryDao.insert(repos.map { repo -> repo.toDBRepo(user.id) } )
+                        }
+                    }
+                    false -> {
+                        db.repositoryDao.findForUser(user.id)
+                    }
+                }
+            }
+            .observeOn(AndroidSchedulers.mainThread())
+            .map { users -> users.map(ToUIRepoConvertible::toUIRepo) }
             .subscribe({ repos ->
                 reposListPresenter.repos.addAll(repos)
-                Log.d("AAA", "REPOS: ${repos.size.toString()}")
                 viewState.updateReposList()
             }, {
-                Log.e("UsersPresenter", "Failed to load users", it)
+                Log.e("UserPresenter", "Failed to load repos", it)
             })
     }
 
     private fun loadUser() {
         subscription = usersRepo.getUser(user.login)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .map(GithubUserRemote::toUIUser)
             .subscribe({ user ->
-                Log.d("AAA", "USER IS LOADED")
                 viewState.showFullUserData(user)
             }, {
-                Log.e("UsersPresenter", "Failed to load users", it)
+                Log.e("UserPresenter", "Failed to load user", it)
             })
     }
 

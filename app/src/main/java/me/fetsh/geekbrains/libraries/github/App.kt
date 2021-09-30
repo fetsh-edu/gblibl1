@@ -3,6 +3,7 @@ package me.fetsh.geekbrains.libraries.github
 import android.app.Application
 import com.github.terrakok.cicerone.Cicerone
 import com.github.terrakok.cicerone.Router
+import me.fetsh.geekbrains.libraries.github.db.Database
 
 class App : Application() {
 
@@ -15,6 +16,7 @@ class App : Application() {
     override fun onCreate() {
         super.onCreate()
         instance = this
+        Database.create(this)
     }
 
     companion object {

@@ -1,19 +1,19 @@
 package me.fetsh.geekbrains.libraries.github.ui.screens.user
 
-import android.content.res.ColorStateList
-import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import github.databinding.FragmentUserBinding
 import me.fetsh.geekbrains.libraries.github.App
-import me.fetsh.geekbrains.libraries.github.models.GithubRepo
-import me.fetsh.geekbrains.libraries.github.models.GithubUser
+import me.fetsh.geekbrains.libraries.github.db.Database
+import me.fetsh.geekbrains.libraries.github.models.GithubRepoRemote
+import me.fetsh.geekbrains.libraries.github.models.GithubUserRemote
+import me.fetsh.geekbrains.libraries.github.models.GithubUserUI
 import me.fetsh.geekbrains.libraries.github.navigation.BackButtonListener
 import me.fetsh.geekbrains.libraries.github.ui.activity.MainActivity
 import me.fetsh.geekbrains.libraries.github.ui.images.GlideImageLoader
-import me.fetsh.geekbrains.libraries.github.ui.screens.users.UsersRVAdapter
+import me.fetsh.geekbrains.libraries.github.utils.AndroidNetworkStatus
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
 
@@ -21,7 +21,7 @@ class UserFragment() : MvpAppCompatFragment(), UserView, BackButtonListener {
     companion object {
         private const val ARGUMENTS_USER = "user"
         @JvmStatic
-        fun newInstance(user: GithubUser) =
+        fun newInstance(user: GithubUserUI) =
             UserFragment().apply {
                 arguments = Bundle().apply {
                     putParcelable(ARGUMENTS_USER, user)
@@ -32,12 +32,14 @@ class UserFragment() : MvpAppCompatFragment(), UserView, BackButtonListener {
     private var vb: FragmentUserBinding? = null
 
     private val presenter by moxyPresenter {
-        val user : GithubUser? = arguments?.getParcelable(ARGUMENTS_USER)
+        val user : GithubUserUI? = arguments?.getParcelable(ARGUMENTS_USER)
         UserPresenter(
-            GithubRepo.Repo(),
-            GithubUser.Repo(),
-            App.instance.router,
-            user!!
+            reposRepo = GithubRepoRemote.Repo(),
+            usersRepo = GithubUserRemote.Repo(),
+            router = App.instance.router,
+            user = user!!,
+            db = Database.getInstance(),
+            networkStatus = AndroidNetworkStatus(requireContext()),
         )
     }
 
@@ -58,7 +60,7 @@ class UserFragment() : MvpAppCompatFragment(), UserView, BackButtonListener {
         }.root
     }
 
-    override fun init(user: GithubUser?) {
+    override fun init(user: GithubUserUI?) {
         vb?.repositories?.isNestedScrollingEnabled = false
         vb?.repositories?.adapter = adapter
         vb?.userLogin?.text = "@${user?.login}"
@@ -69,7 +71,7 @@ class UserFragment() : MvpAppCompatFragment(), UserView, BackButtonListener {
         }
     }
 
-    override fun showFullUserData(user: GithubUser) {
+    override fun showFullUserData(user: GithubUserUI) {
         vb?.userName?.visibility = View.VISIBLE
         vb?.userName?.text = user.name
         vb?.followersCount?.text = user.followers.toString()

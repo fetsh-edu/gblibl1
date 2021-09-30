@@ -1,12 +1,12 @@
 package me.fetsh.geekbrains.libraries.github.ui.screens.repo
 
 import com.github.terrakok.cicerone.Router
-import me.fetsh.geekbrains.libraries.github.models.GithubRepo
+import me.fetsh.geekbrains.libraries.github.models.GithubRepoUI
 import moxy.MvpPresenter
 
 class RepoPresenter(
     private val router: Router,
-    private val repo: GithubRepo
+    private val repo: GithubRepoUI
 ) : MvpPresenter<RepoView>() {
 
     override fun onFirstViewAttach() {

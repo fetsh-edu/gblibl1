@@ -5,9 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import github.databinding.FragmentRepoBinding
-import github.databinding.FragmentUserBinding
 import me.fetsh.geekbrains.libraries.github.App
-import me.fetsh.geekbrains.libraries.github.models.GithubRepo
+import me.fetsh.geekbrains.libraries.github.models.GithubRepoUI
 import me.fetsh.geekbrains.libraries.github.navigation.BackButtonListener
 import me.fetsh.geekbrains.libraries.github.ui.activity.MainActivity
 import moxy.MvpAppCompatFragment
@@ -17,7 +16,7 @@ class RepoFragment : MvpAppCompatFragment(), RepoView, BackButtonListener {
     companion object {
         private const val ARGUMENTS_REPO = "repo"
         @JvmStatic
-        fun newInstance(repo: GithubRepo) =
+        fun newInstance(repo: GithubRepoUI) =
             RepoFragment().apply {
                 arguments = Bundle().apply {
                     putParcelable(ARGUMENTS_REPO, repo)
@@ -28,7 +27,7 @@ class RepoFragment : MvpAppCompatFragment(), RepoView, BackButtonListener {
     private var vb: FragmentRepoBinding? = null
 
     private val presenter by moxyPresenter {
-        val repo : GithubRepo? = arguments?.getParcelable(ARGUMENTS_REPO)
+        val repo : GithubRepoUI? = arguments?.getParcelable(ARGUMENTS_REPO)
         RepoPresenter(
             App.instance.router,
             repo!!
@@ -51,7 +50,7 @@ class RepoFragment : MvpAppCompatFragment(), RepoView, BackButtonListener {
         vb = null
     }
 
-    override fun init(repo: GithubRepo) {
+    override fun init(repo: GithubRepoUI) {
         vb?.repoName?.text = repo.name
         vb?.repoForksCount?.text = "Forks: ${repo?.forks}"
     }
