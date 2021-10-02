@@ -17,10 +17,8 @@ import me.fetsh.geekbrains.libraries.github.utils.AndroidNetworkStatus
 import moxy.MvpPresenter
 
 class UsersPresenter(
-    private val networkStatus: AndroidNetworkStatus,
-    private val usersRepo: GithubUserRemote.Repo,
+    private val usersRepo: GithubUserUI.Repo,
     private val router: Router,
-    private val db: Database
 ) : MvpPresenter<UsersView>() {
 
     class UsersListPresenter : RVContract.UserListPresenter {
@@ -53,22 +51,7 @@ class UsersPresenter(
     }
 
     private fun loadUsers() {
-        networkStatus.isOnlineSingle()
-            .subscribeOn(Schedulers.io())
-            .flatMap { isOnline ->
-                when(isOnline) {
-                    true -> {
-                        usersRepo.getUsers().doAfterSuccess { users ->
-                            db.userDao.insert(users.map(GithubUserRemote::toDBUser))
-                        }
-                    }
-                    false -> {
-                        db.userDao.getAll()
-                    }
-                }
-            }
-            .map{ users -> users.map(ToUIUserConvertible::toUIUser) }
-            .observeOn(AndroidSchedulers.mainThread())
+        usersRepo.getUsers()
             .subscribe({ users ->
                 usersListPresenter.users.addAll(users)
                 viewState.updateList()

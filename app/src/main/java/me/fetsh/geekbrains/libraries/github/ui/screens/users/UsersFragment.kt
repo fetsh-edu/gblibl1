@@ -9,6 +9,7 @@ import me.fetsh.geekbrains.libraries.github.App
 import github.databinding.FragmentUsersBinding
 import me.fetsh.geekbrains.libraries.github.db.Database
 import me.fetsh.geekbrains.libraries.github.models.GithubUserRemote
+import me.fetsh.geekbrains.libraries.github.models.GithubUserUI
 import me.fetsh.geekbrains.libraries.github.navigation.BackButtonListener
 import me.fetsh.geekbrains.libraries.github.ui.activity.MainActivity
 import me.fetsh.geekbrains.libraries.github.ui.images.GlideImageLoader
@@ -22,10 +23,12 @@ class UsersFragment : MvpAppCompatFragment(), UsersView, BackButtonListener {
 
     private val presenter by moxyPresenter {
         UsersPresenter(
-            networkStatus = AndroidNetworkStatus(requireContext()),
-            usersRepo = GithubUserRemote.Repo(),
+            usersRepo = GithubUserUI.Repo(
+                networkStatus = AndroidNetworkStatus(requireContext()),
+                remoteRepo = GithubUserRemote.Repo(),
+                db = Database.getInstance()
+            ),
             router = App.instance.router,
-            db = Database.getInstance()
         )
     }
 
