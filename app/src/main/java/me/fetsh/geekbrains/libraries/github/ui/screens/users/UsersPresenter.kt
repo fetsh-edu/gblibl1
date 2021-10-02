@@ -2,21 +2,14 @@ package me.fetsh.geekbrains.libraries.github.ui.screens.users
 
 import android.util.Log
 import com.github.terrakok.cicerone.Router
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
-import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.disposables.Disposable
-import io.reactivex.rxjava3.schedulers.Schedulers
-import me.fetsh.geekbrains.libraries.github.db.Database
-import me.fetsh.geekbrains.libraries.github.models.GithubUserLocal
-import me.fetsh.geekbrains.libraries.github.models.GithubUserRemote
 import me.fetsh.geekbrains.libraries.github.models.GithubUserUI
-import me.fetsh.geekbrains.libraries.github.models.ToUIUserConvertible
 import me.fetsh.geekbrains.libraries.github.navigation.Screens
 import me.fetsh.geekbrains.libraries.github.ui.contracts.RVContract
-import me.fetsh.geekbrains.libraries.github.utils.AndroidNetworkStatus
 import moxy.MvpPresenter
+import javax.inject.Inject
 
-class UsersPresenter(
+class UsersPresenter @Inject constructor(
     private val usersRepo: GithubUserUI.Repo,
     private val router: Router,
 ) : MvpPresenter<UsersView>() {

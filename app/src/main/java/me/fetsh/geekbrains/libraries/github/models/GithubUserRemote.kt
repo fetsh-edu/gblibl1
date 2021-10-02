@@ -3,9 +3,10 @@ package me.fetsh.geekbrains.libraries.github.models
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import io.reactivex.rxjava3.core.Single
-import me.fetsh.geekbrains.libraries.github.remote.RetrofitHolder
+import retrofit2.Retrofit
 import retrofit2.http.GET
 import retrofit2.http.Path
+import javax.inject.Inject
 
 data class GithubUserRemote (
     @Expose
@@ -39,7 +40,9 @@ data class GithubUserRemote (
         return GithubUserUI(id, login, avatarUrl, reposUrl, name, followers, following)
     }
 
-    class Repo {
+    class Repo @Inject constructor(
+        private val retrofitHolder: Retrofit
+    ) {
         interface GithubUserService {
 
             @GET("/users")
@@ -52,7 +55,7 @@ data class GithubUserRemote (
         }
 
         private val apiService : GithubUserService by lazy {
-            RetrofitHolder.retrofit.create(GithubUserService::class.java)
+            retrofitHolder.create(GithubUserService::class.java)
         }
 
         fun getUsers(): Single<List<GithubUserRemote>> =

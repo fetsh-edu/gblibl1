@@ -2,10 +2,11 @@ package me.fetsh.geekbrains.libraries.github.models
 
 import com.google.gson.annotations.Expose
 import io.reactivex.rxjava3.core.Single
-import me.fetsh.geekbrains.libraries.github.remote.RetrofitHolder
+import retrofit2.Retrofit
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Url
+import javax.inject.Inject
 
 data class GithubRepoRemote(
     @Expose
@@ -24,9 +25,9 @@ data class GithubRepoRemote(
         return GithubRepoLocal(id, name, forks, userId)
     }
 
-    class Repo {
+    class Repo @Inject constructor(private val retrofitHolder: Retrofit) {
         private val apiService : GithubRepoService by lazy {
-            RetrofitHolder.retrofit.create(GithubRepoService::class.java)
+            retrofitHolder.create(GithubRepoService::class.java)
         }
 
         fun getReposByLogin(login: String): Single<List<GithubRepoRemote>> =

@@ -26,12 +26,12 @@ class RepoFragment : MvpAppCompatFragment(), RepoView, BackButtonListener {
 
     private var vb: FragmentRepoBinding? = null
 
-    private val presenter by moxyPresenter {
+    private val presenter : RepoPresenter by moxyPresenter {
         val repo : GithubRepoUI? = arguments?.getParcelable(ARGUMENTS_REPO)
-        RepoPresenter(
-            App.instance.router,
-            repo!!
-        )
+        App.instance.appComponent
+            .repoComponentFactory
+            .create(repo!!)
+            .presenter
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {

@@ -22,14 +22,7 @@ class UsersFragment : MvpAppCompatFragment(), UsersView, BackButtonListener {
     private var vb: FragmentUsersBinding? = null
 
     private val presenter by moxyPresenter {
-        UsersPresenter(
-            usersRepo = GithubUserUI.Repo(
-                networkStatus = AndroidNetworkStatus(requireContext()),
-                remoteRepo = GithubUserRemote.Repo(),
-                db = Database.getInstance()
-            ),
-            router = App.instance.router,
-        )
+        App.instance.appComponent.usersPresenter()
     }
 
     private val adapter by lazy {

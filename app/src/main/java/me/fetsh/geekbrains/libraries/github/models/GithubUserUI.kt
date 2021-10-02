@@ -6,7 +6,8 @@ import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.schedulers.Schedulers
 import kotlinx.parcelize.Parcelize
 import me.fetsh.geekbrains.libraries.github.db.Database
-import me.fetsh.geekbrains.libraries.github.utils.AndroidNetworkStatus
+import me.fetsh.geekbrains.libraries.github.utils.NetworkStatus
+import javax.inject.Inject
 
 @Parcelize
 data class GithubUserUI(
@@ -18,8 +19,9 @@ data class GithubUserUI(
     val followers: Int? = null,
     val following: Int? = null
 ) : Parcelable {
-    class Repo(
-        private val networkStatus: AndroidNetworkStatus,
+
+    class Repo @Inject constructor(
+        private val networkStatus: NetworkStatus,
         private val remoteRepo:  GithubUserRemote.Repo,
         private val db: Database
     ) {

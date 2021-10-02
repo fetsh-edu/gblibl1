@@ -11,17 +11,17 @@ import me.fetsh.geekbrains.libraries.github.models.*
 import me.fetsh.geekbrains.libraries.github.navigation.Screens
 import me.fetsh.geekbrains.libraries.github.ui.contracts.RVContract
 import me.fetsh.geekbrains.libraries.github.utils.AndroidNetworkStatus
+import me.fetsh.geekbrains.libraries.github.utils.NetworkStatus
 import moxy.InjectViewState
 import moxy.MvpPresenter
+import javax.inject.Inject
 
 @InjectViewState
-class UserPresenter(
-    private val reposRepo: GithubRepoRemote.Repo,
+class UserPresenter @Inject constructor(
     private val usersRepo: GithubUserRemote.Repo,
     private val router: Router,
     private val user: GithubUserUI,
-    private val db: Database,
-    private val networkStatus: AndroidNetworkStatus
+    private val reposRepo : GithubRepoUI.Repo
 ) : MvpPresenter<UserView>() {
 
     class ReposListPresenter : RVContract.ReposListPresenter {
@@ -35,7 +35,6 @@ class UserPresenter(
         override fun bindView(view: RVContract.RepoItemView) {
             val repo = repos[view.pos]
             view.showName(repo.name)
-
         }
     }
     val reposListPresenter = ReposListPresenter()
@@ -53,22 +52,7 @@ class UserPresenter(
 
     private fun loadRepositories() {
         viewState.showLoading()
-        networkStatus.isOnlineSingle()
-            .subscribeOn(Schedulers.io())
-            .flatMap { isOnline ->
-                when (isOnline) {
-                    true -> {
-                        reposRepo.getReposByURL(user.reposUrl).doAfterSuccess{ repos ->
-                            db.repositoryDao.insert(repos.map { repo -> repo.toDBRepo(user.id) } )
-                        }
-                    }
-                    false -> {
-                        db.repositoryDao.findForUser(user.id)
-                    }
-                }
-            }
-            .observeOn(AndroidSchedulers.mainThread())
-            .map { users -> users.map(ToUIRepoConvertible::toUIRepo) }
+        reposRepo.getRepos(user)
             .subscribe({ repos ->
                 reposListPresenter.repos.addAll(repos)
                 viewState.updateReposList()

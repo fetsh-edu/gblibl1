@@ -31,16 +31,12 @@ class UserFragment() : MvpAppCompatFragment(), UserView, BackButtonListener {
 
     private var vb: FragmentUserBinding? = null
 
-    private val presenter by moxyPresenter {
+    private val presenter : UserPresenter by moxyPresenter {
         val user : GithubUserUI? = arguments?.getParcelable(ARGUMENTS_USER)
-        UserPresenter(
-            reposRepo = GithubRepoRemote.Repo(),
-            usersRepo = GithubUserRemote.Repo(),
-            router = App.instance.router,
-            user = user!!,
-            db = Database.getInstance(),
-            networkStatus = AndroidNetworkStatus(requireContext()),
-        )
+        App.instance.appComponent
+            .userComponentFactory
+            .create(user!!)
+            .presenter
     }
 
     private val imageLoader by lazy {
