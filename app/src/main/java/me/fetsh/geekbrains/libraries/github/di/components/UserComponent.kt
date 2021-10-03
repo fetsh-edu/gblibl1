@@ -2,9 +2,11 @@ package me.fetsh.geekbrains.libraries.github.di.components
 
 import dagger.BindsInstance
 import dagger.Subcomponent
+import me.fetsh.geekbrains.libraries.github.di.UserScope
 import me.fetsh.geekbrains.libraries.github.models.GithubUserUI
 import me.fetsh.geekbrains.libraries.github.ui.screens.user.UserPresenter
 
+@UserScope
 @Subcomponent
 interface UserComponent {
 
