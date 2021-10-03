@@ -1,8 +1,12 @@
-package me.fetsh.geekbrains.libraries.github.di.modules
+package me.fetsh.geekbrains.libraries.github.di.components
 
 import dagger.BindsInstance
 import dagger.Component
 import dagger.Subcomponent
+import me.fetsh.geekbrains.libraries.github.di.modules.ApiModule
+import me.fetsh.geekbrains.libraries.github.di.modules.AppModule
+import me.fetsh.geekbrains.libraries.github.di.modules.CiceroneModule
+import me.fetsh.geekbrains.libraries.github.di.modules.DatabaseModule
 import me.fetsh.geekbrains.libraries.github.models.GithubRepoUI
 import me.fetsh.geekbrains.libraries.github.models.GithubUserUI
 import me.fetsh.geekbrains.libraries.github.ui.activity.MainActivity
@@ -19,7 +23,6 @@ import javax.inject.Singleton
         ApiModule::class,
         CiceroneModule::class,
         DatabaseModule::class
-//        RepoModule::class
     ]
 )
 interface AppComponent {

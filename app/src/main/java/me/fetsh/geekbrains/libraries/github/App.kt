@@ -1,9 +1,9 @@
 package me.fetsh.geekbrains.libraries.github
 
 import android.app.Application
-import me.fetsh.geekbrains.libraries.github.di.modules.AppComponent
+import me.fetsh.geekbrains.libraries.github.di.components.AppComponent
 import me.fetsh.geekbrains.libraries.github.di.modules.AppModule
-import me.fetsh.geekbrains.libraries.github.di.modules.DaggerAppComponent
+import me.fetsh.geekbrains.libraries.github.di.components.DaggerAppComponent
 
 class App : Application() {
 
