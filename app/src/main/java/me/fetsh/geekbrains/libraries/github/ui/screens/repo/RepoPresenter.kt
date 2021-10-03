@@ -7,18 +7,20 @@ import me.fetsh.geekbrains.libraries.github.models.RepoInterpolator
 import moxy.MvpPresenter
 import javax.inject.Inject
 
-class RepoPresenter
+class RepoPresenter @Inject constructor(
+    private val router: Router,
+    private val repo: GithubRepoUI
+) : MvpPresenter<RepoView>() {
+
     @Inject
-    constructor(
-        private val router: Router,
-        private val repo: GithubRepoUI,
-        private val repoInterpolator: RepoInterpolator
-    ) : MvpPresenter<RepoView>() {
+    lateinit var repoInterpolator : RepoInterpolator
 
     override fun onFirstViewAttach() {
         super.onFirstViewAttach()
         viewState.init(repo)
-        Log.wtf("Interpolated", "${repoInterpolator.interpolate(repo)}")
+        if (this::repoInterpolator.isInitialized) {
+            Log.wtf("Interpolated", "${repoInterpolator.interpolate(repo)}")
+        }
     }
 
     fun backPressed(): Boolean {
