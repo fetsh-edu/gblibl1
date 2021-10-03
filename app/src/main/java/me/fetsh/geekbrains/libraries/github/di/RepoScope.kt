@@ -5,7 +5,3 @@ import javax.inject.Scope
 @Scope
 @Retention(AnnotationRetention.RUNTIME)
 annotation class RepoScope
-
-@Scope
-@Retention(AnnotationRetention.RUNTIME)
-annotation class UserScope
