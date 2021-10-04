@@ -3,6 +3,7 @@ package me.fetsh.geekbrains.libraries.github.ui.screens.repo
 import android.util.Log
 import com.github.terrakok.cicerone.Router
 import me.fetsh.geekbrains.libraries.github.di.RepoScope
+import me.fetsh.geekbrains.libraries.github.di.RepoScopeContainer
 import me.fetsh.geekbrains.libraries.github.models.GithubRepoUI
 import me.fetsh.geekbrains.libraries.github.models.RepoInterpolator
 import moxy.MvpPresenter
@@ -14,7 +15,8 @@ class RepoPresenter
     constructor(
         private val router: Router,
         private val repo: GithubRepoUI,
-        private val repoInterpolator: RepoInterpolator
+        private val repoInterpolator: RepoInterpolator,
+        private val repoScopeContainer: RepoScopeContainer
     ) : MvpPresenter<RepoView>() {
 
     override fun onFirstViewAttach() {
@@ -26,5 +28,10 @@ class RepoPresenter
     fun backPressed(): Boolean {
         router.exit()
         return true
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        repoScopeContainer.releaseRepoScope()
     }
 }

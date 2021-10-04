@@ -28,10 +28,9 @@ class RepoFragment : MvpAppCompatFragment(), RepoView, BackButtonListener {
 
     private val presenter : RepoPresenter by moxyPresenter {
         val repo : GithubRepoUI? = arguments?.getParcelable(ARGUMENTS_REPO)
-        App.instance.appComponent
-            .repoComponentFactory()
-            .create(repo!!)
-            .presenter
+
+        App.instance.initRepoSubcomponent(repo!!)
+            ?.presenter!!
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {

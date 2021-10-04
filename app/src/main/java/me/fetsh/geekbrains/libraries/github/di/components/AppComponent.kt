@@ -29,7 +29,6 @@ interface AppComponent {
     }
 
     fun usersComponentFactory() : UsersComponent.Factory
-    fun repoComponentFactory() : RepoComponent.Factory
     fun mainPresenter() : MainPresenter
     fun inject(mainActivity: MainActivity)
 }

@@ -20,3 +20,6 @@ interface UsersScopeContainer {
 interface UserScopeContainer {
     fun releaseUserScope()
 }
+interface RepoScopeContainer {
+    fun releaseRepoScope()
+}
