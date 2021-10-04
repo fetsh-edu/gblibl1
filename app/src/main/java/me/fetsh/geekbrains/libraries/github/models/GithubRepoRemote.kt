@@ -2,6 +2,7 @@ package me.fetsh.geekbrains.libraries.github.models
 
 import com.google.gson.annotations.Expose
 import io.reactivex.rxjava3.core.Single
+import me.fetsh.geekbrains.libraries.github.di.UserScope
 import retrofit2.Retrofit
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -25,6 +26,7 @@ data class GithubRepoRemote(
         return GithubRepoLocal(id, name, forks, userId)
     }
 
+    @UserScope
     class Repo @Inject constructor(private val retrofitHolder: Retrofit) {
         private val apiService : GithubRepoService by lazy {
             retrofitHolder.create(GithubRepoService::class.java)

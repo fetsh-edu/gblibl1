@@ -7,6 +7,8 @@ import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.disposables.Disposable
 import io.reactivex.rxjava3.schedulers.Schedulers
 import me.fetsh.geekbrains.libraries.github.db.Database
+import me.fetsh.geekbrains.libraries.github.di.UserScope
+import me.fetsh.geekbrains.libraries.github.di.UserScopeContainer
 import me.fetsh.geekbrains.libraries.github.models.*
 import me.fetsh.geekbrains.libraries.github.navigation.Screens
 import me.fetsh.geekbrains.libraries.github.ui.contracts.RVContract
@@ -16,12 +18,14 @@ import moxy.InjectViewState
 import moxy.MvpPresenter
 import javax.inject.Inject
 
+@UserScope
 @InjectViewState
 class UserPresenter @Inject constructor(
     private val usersRepo: GithubUserRemote.Repo,
     private val router: Router,
     private val user: GithubUserUI,
-    private val reposRepo : GithubRepoUI.Repo
+    private val reposRepo : GithubRepoUI.Repo,
+    private val userScopeContainer: UserScopeContainer
 ) : MvpPresenter<UserView>() {
 
     class ReposListPresenter : RVContract.ReposListPresenter {
@@ -76,5 +80,11 @@ class UserPresenter @Inject constructor(
     fun backPressed(): Boolean {
         router.exit()
         return true
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        subscription?.dispose()
+        userScopeContainer.releaseUserScope()
     }
 }

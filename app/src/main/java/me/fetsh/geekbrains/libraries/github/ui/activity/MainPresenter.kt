@@ -4,7 +4,9 @@ import com.github.terrakok.cicerone.Router
 import me.fetsh.geekbrains.libraries.github.navigation.Screens
 import moxy.MvpPresenter
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class MainPresenter @Inject constructor(private val router: Router) : MvpPresenter<MainView>() {
 
     override fun onFirstViewAttach() {

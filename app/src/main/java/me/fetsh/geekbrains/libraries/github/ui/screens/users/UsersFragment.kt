@@ -5,15 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
-import me.fetsh.geekbrains.libraries.github.App
 import github.databinding.FragmentUsersBinding
-import me.fetsh.geekbrains.libraries.github.db.Database
-import me.fetsh.geekbrains.libraries.github.models.GithubUserRemote
-import me.fetsh.geekbrains.libraries.github.models.GithubUserUI
+import me.fetsh.geekbrains.libraries.github.App
+import me.fetsh.geekbrains.libraries.github.di.components.UsersComponent
 import me.fetsh.geekbrains.libraries.github.navigation.BackButtonListener
 import me.fetsh.geekbrains.libraries.github.ui.activity.MainActivity
 import me.fetsh.geekbrains.libraries.github.ui.images.GlideImageLoader
-import me.fetsh.geekbrains.libraries.github.utils.AndroidNetworkStatus
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
 
@@ -22,7 +19,7 @@ class UsersFragment : MvpAppCompatFragment(), UsersView, BackButtonListener {
     private var vb: FragmentUsersBinding? = null
 
     private val presenter by moxyPresenter {
-        App.instance.appComponent.usersPresenter()
+        App.instance.initUsersSubcomponent().usersPresenter()
     }
 
     private val adapter by lazy {

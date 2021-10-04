@@ -33,10 +33,9 @@ class UserFragment() : MvpAppCompatFragment(), UserView, BackButtonListener {
 
     private val presenter : UserPresenter by moxyPresenter {
         val user : GithubUserUI? = arguments?.getParcelable(ARGUMENTS_USER)
-        App.instance.appComponent
-            .userComponentFactory
-            .create(user!!)
-            .presenter
+        App.instance
+            .initUserSubcomponent(user!!)
+            ?.presenter!!
     }
 
     private val imageLoader by lazy {

@@ -13,7 +13,7 @@ interface RepoComponent {
 
     @Subcomponent.Factory
     interface Factory {
-        fun create(@BindsInstance user: GithubRepoUI): RepoComponent
+        fun create(@BindsInstance repo: GithubRepoUI): RepoComponent
     }
 
     val presenter: RepoPresenter

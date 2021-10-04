@@ -29,7 +29,7 @@ class RepoFragment : MvpAppCompatFragment(), RepoView, BackButtonListener {
     private val presenter : RepoPresenter by moxyPresenter {
         val repo : GithubRepoUI? = arguments?.getParcelable(ARGUMENTS_REPO)
         App.instance.appComponent
-            .repoComponentFactory
+            .repoComponentFactory()
             .create(repo!!)
             .presenter
     }

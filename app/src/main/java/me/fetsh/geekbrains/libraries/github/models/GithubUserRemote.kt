@@ -3,6 +3,8 @@ package me.fetsh.geekbrains.libraries.github.models
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import io.reactivex.rxjava3.core.Single
+import me.fetsh.geekbrains.libraries.github.di.UserScope
+import me.fetsh.geekbrains.libraries.github.di.UsersScope
 import retrofit2.Retrofit
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -40,6 +42,7 @@ data class GithubUserRemote (
         return GithubUserUI(id, login, avatarUrl, reposUrl, name, followers, following)
     }
 
+    @UsersScope
     class Repo @Inject constructor(
         private val retrofitHolder: Retrofit
     ) {

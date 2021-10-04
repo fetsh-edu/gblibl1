@@ -4,8 +4,19 @@ import javax.inject.Scope
 
 @Scope
 @Retention(AnnotationRetention.RUNTIME)
-annotation class RepoScope
+annotation class UsersScope
 
 @Scope
 @Retention(AnnotationRetention.RUNTIME)
 annotation class UserScope
+
+@Scope
+@Retention(AnnotationRetention.RUNTIME)
+annotation class RepoScope
+
+interface UsersScopeContainer {
+    fun releaseUsersScope()
+}
+interface UserScopeContainer {
+    fun releaseUserScope()
+}
